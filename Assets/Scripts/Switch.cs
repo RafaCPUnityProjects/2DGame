@@ -5,23 +5,22 @@ public class Switch : MonoBehaviour {
 
 	public DoorTrigger[] doorTriggers;
 	public bool sticky;
+	public AudioClip switchSound;
 
 	private bool down;
 	private Animator animator;
 
-	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 
 	void OnTriggerEnter2D(Collider2D target)
 	{
 		animator.SetInteger("AnimState", 1);
+		if (switchSound)
+		{
+			AudioSource.PlayClipAtPoint(switchSound, transform.position);
+		}
 		down = true;
 
 		foreach (DoorTrigger trigger in doorTriggers)

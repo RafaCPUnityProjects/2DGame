@@ -8,6 +8,10 @@ public class Player : MonoBehaviour {
 	public bool standing = false;
 	public float jetSpeed = 15f;
 	public float airSpeedMultiplier = .3f;
+	public AudioClip leftFootSound;
+	public AudioClip rightFootSound;
+	public AudioClip thudSound;
+	public AudioClip rocketSound;
 
 	private PlayerController controller;
 	private Animator animator;
@@ -16,6 +20,55 @@ public class Player : MonoBehaviour {
 	{
 		controller = GetComponent<PlayerController>();
 		animator = GetComponent<Animator>();
+	}
+
+	void PlayLeftFootSound()
+	{
+		if (leftFootSound)
+		{
+			AudioSource.PlayClipAtPoint(leftFootSound, transform.position);
+		}
+	}
+
+	void PlayRightFootSound()
+	{
+		if (rightFootSound)
+		{
+			AudioSource.PlayClipAtPoint(rightFootSound, transform.position);
+		}
+	}
+
+	void PlayRocketSound()
+	{
+		if (!rocketSound || GameObject.Find("RocketSound"))
+		{
+			return;
+		}
+
+		GameObject go = new GameObject("RocketSound");
+		AudioSource aSrc = go.AddComponent<AudioSource>();
+		aSrc.clip = rocketSound;
+		aSrc.volume = 0.7f;
+		aSrc.Play();
+
+		Destroy(go, rocketSound.length);
+	}
+
+	void OnCollisionEnter2D(Collision2D target)
+	{
+		if (!standing)
+		{
+			float absVelX = Mathf.Abs(rigidbody2D.velocity.x);
+			float absVelY = Mathf.Abs(rigidbody2D.velocity.y);
+
+			if (absVelX <= .1f || absVelY <= .1f)
+			{
+				if (thudSound)
+				{
+					AudioSource.PlayClipAtPoint(thudSound, transform.position);
+				}
+			}
+		}
 	}
 
 	void Update()
@@ -53,6 +106,7 @@ public class Player : MonoBehaviour {
 
 		if (controller.moving.y > 0)
 		{
+			PlayRocketSound();
 			if (absVelY < maxVelocity.y)
 			{
 				forceY = jetSpeed;

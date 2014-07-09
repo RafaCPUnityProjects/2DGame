@@ -3,20 +3,16 @@ using System.Collections;
 
 public class Collectable : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+	public AudioClip pickupSound;
 
 	void OnTriggerEnter2D(Collider2D target)
 	{
 		if (target.gameObject.tag == "Player")
 		{
+			if (pickupSound)
+			{
+				AudioSource.PlayClipAtPoint(pickupSound, transform.position);
+			}
 			Destroy(this.gameObject);
 		}
 	}

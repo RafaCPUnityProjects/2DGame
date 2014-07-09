@@ -3,17 +3,14 @@ using System.Collections;
 
 public class AlienB : MonoBehaviour {
 
+	public AudioClip attackSound;
+
 	private Animator animator;
 	private bool readyToAttack;
 
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 	}
 
 	void OnTriggerStay2D(Collider2D target)
@@ -27,7 +24,11 @@ public class AlienB : MonoBehaviour {
 			}
 			else
 			{
-				animator.SetInteger("AnimState", 1);
+				animator.SetInteger("AnimState", 1); 
+				if (attackSound)
+				{
+					AudioSource.PlayClipAtPoint(attackSound, transform.position);
+				}
 			}
 		}
 	}

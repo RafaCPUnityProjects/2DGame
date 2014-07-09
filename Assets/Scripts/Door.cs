@@ -8,6 +8,7 @@ public class Door : MonoBehaviour {
 	public const int OPEN = 2;
 	public const int CLOSING = 3;
 	public float closeDelay = 0.5f;
+	public AudioClip doorSound;
 
 	private int state = IDLE;
 	private Animator animator;
@@ -55,6 +56,10 @@ public class Door : MonoBehaviour {
 	public void Open()
 	{
 		animator.SetInteger("AnimState", 1);
+		if (doorSound)
+		{
+			AudioSource.PlayClipAtPoint(doorSound, transform.position);
+		}
 	}
 
 	public void Close()
@@ -66,5 +71,9 @@ public class Door : MonoBehaviour {
 	{
 		yield return new WaitForSeconds(closeDelay);
 		animator.SetInteger("AnimState", 2);
+		if (doorSound)
+		{
+			AudioSource.PlayClipAtPoint(doorSound, transform.position);
+		}
 	}
 }
